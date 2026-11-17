@@ -1,6 +1,7 @@
 import { Simulation } from './simulation.js';
 import { Renderer } from './renderer.js';
 import { SimulationClock } from './clock.js';
+import { patterns, previewSVG } from './patterns.js';
 
 const simulation = new Simulation();
 const $ = selector => document.querySelector(selector);
@@ -80,4 +81,28 @@ document.addEventListener('keydown', event => {
   if (event.key.toLowerCase() === 'g') randomize();
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden && clock.running) { clock.pause(); message('Paused while the tab is hidden. Press Play to resume.'); } });
+
+function choosePattern(pattern) {
+  clock.pause();
+  renderer.pattern = pattern;
+  renderer.hover = null;
+  for (const button of document.querySelectorAll('.pattern-button')) button.setAttribute('aria-pressed', String(button.dataset.pattern === pattern?.id));
+  $('#draw-mode').setAttribute('aria-pressed', String(!pattern));
+  $('#mode-label').textContent = pattern ? `${pattern.name} · Click to place · Esc to draw` : 'Click or drag to draw · Start on a live cell to erase';
+  $('#pattern-help').textContent = pattern ? `${pattern.width} × ${pattern.height} cells. Hover to preview; tap or click to place. Other cells outside its footprint stay unchanged.` : 'Choose a pattern, then click the canvas to place it.';
+  $('#empty-hint').style.visibility = pattern ? 'hidden' : 'visible';
+  message(pattern ? `${pattern.name} selected. Click the canvas to plant it.` : 'Drawing mode. Start on a living cell to erase.');
+  renderer.draw();
+}
+for (const pattern of patterns) {
+  const button = document.createElement('button');
+  button.className = 'pattern-button';
+  button.dataset.pattern = pattern.id;
+  button.setAttribute('aria-pressed', 'false');
+  button.innerHTML = `${previewSVG(pattern)}<span class="pattern-copy"><span class="pattern-name">${pattern.name}</span><span class="pattern-description">${pattern.description}</span></span><span class="pattern-arrow" aria-hidden="true">↗</span>`;
+  button.addEventListener('click', () => choosePattern(pattern));
+  $('#pattern-list').append(button);
+}
+$('#draw-mode').addEventListener('click', () => choosePattern(null));
+document.addEventListener('keydown', event => { if (event.key === 'Escape') choosePattern(null); });
 update();
