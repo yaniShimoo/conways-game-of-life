@@ -6,7 +6,9 @@ This university AI-assisted software engineering project emphasizes mathematical
 
 ## Preview and deployment
 
-Publication details and verification will be added after GitHub Pages is confirmed live.
+**[Open the live sandbox](https://yanishimoo.github.io/conways-game-of-life/)** · [GitHub source and commit history](https://github.com/yaniShimoo/conways-game-of-life)
+
+GitHub Pages was verified with HTTP 200 and all 12 browser tests passed against the public site on 2026-11-17.
 
 ![Life Lab desktop interface with a Pulsar](docs/screenshots/desktop.png)
 
@@ -28,7 +30,7 @@ Publication details and verification will be added after GitHub Pages is confirm
 Install Node.js 22 or later for the included development server. The application itself needs only a modern browser.
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/yaniShimoo/conways-game-of-life.git
 cd conways-game-of-life
 npm start
 ```
@@ -125,7 +127,7 @@ The browser configuration uses installed **Google Chrome**. Install Chrome first
 To test a deployment, set `TEST_BASE_URL` to the complete site URL with a trailing slash before running `npm run test:browser`. For PowerShell:
 
 ```powershell
-$env:TEST_BASE_URL = 'https://OWNER.github.io/REPOSITORY/'
+$env:TEST_BASE_URL = 'https://yanishimoo.github.io/conways-game-of-life/'
 npm run test:browser
 Remove-Item Env:TEST_BASE_URL
 ```

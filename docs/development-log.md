@@ -31,6 +31,8 @@ Commits were created during development, after their corresponding changes. Ther
 
 The documentation commit adds the full README, this expanded log, actual screenshots, `.nojekyll`, and the named browser-test command. Its hash is available from Git history; this document does not attempt to embed its own changing commit hash.
 
+That documentation milestone was committed as `153dd3e` (`docs: document usage tests and actual AI development history`). The final documentation-only commit records the verified deployment described below; its hash can be read from `git log`.
+
 ## Design and engineering decisions
 
 - **Pure engine:** `simulation.js` imports no DOM or browser APIs, making mathematical behavior easy to test using Node's built-in runner.
@@ -78,7 +80,21 @@ All viewport checks confirmed a square Canvas and no horizontal page overflow. S
 
 ## Publication status
 
-The requested repository name was checked under `yaniShimoo`; GitHub returned 404, so no existing repository was overwritten. Repository creation, Git push, Pages configuration, and deployed verification will be recorded only after their actual results are available.
+Completed on **2026-11-17**:
+
+1. Checked `yaniShimoo/conways-game-of-life`; GitHub returned 404, so no existing repository was overwritten.
+2. Created the requested public repository with the supplied name and description using the authenticated existing account. [Repository](https://github.com/yaniShimoo/conways-game-of-life).
+3. Configured HTTPS Git authentication and pushed the original nine incremental commits on `main`. Both local HEAD and `git ls-remote origin refs/heads/main` reported `153dd3e5add329806080b6bd628eae2db61bec1a` at this stage. GitHub's API reported public visibility, default branch `main`, and nine commits. Unauthenticated API requests also confirmed public repository and source-file access.
+4. Configured GitHub Pages through the REST API with source branch `main` and directory `/`. The first checks reported `building`, and the site initially returned 404 while provisioning; this was not reported as a successful deployment.
+5. The Pages build then reported **`built`**, with no error and source commit `153dd3e5add329806080b6bd628eae2db61bec1a`. The [public site](https://yanishimoo.github.io/conways-game-of-life/) returned **HTTP 200**.
+6. Ran the same full browser suite against `https://yanishimoo.github.io/conways-game-of-life/` using `TEST_BASE_URL`. **All 12 tests passed in 17.2 seconds**, including deployed controls, drawing, pattern placement and edge rejection, save/load, keyboard behavior, emulated touch, and the five viewport widths. No server-local URL was used for the touch test; it used the configured deployment base URL.
+7. Updated the README and this log with the verified URLs and results. This final documentation-only update is committed separately and pushed without rewriting the earlier history. Final commit identity and deployment state are verified in the delivery report.
+
+The portable CLI lives in ignored `tools/gh/` inside the workspace and can be located with `Get-ChildItem tools/gh -Filter gh.exe -Recurse`. It was invoked by its full path; it was not added to the machine's global PATH. No CLI archive, credentials, tokens, `node_modules`, or browser trace artifacts were committed. The final code and history are public, and the deployment uses ordinary branch-based GitHub Pages hosting.
+
+## Remaining verification limits
+
+The full functional and responsive browser suite passed locally and on the deployment. Firefox, Safari, physical phones/tablets, and manual screen-reader behavior were not verified. Saved boards are intentionally browser-local and consist of one save slot. These are documented limits, not unfinished mandatory application features.
 
 ## Evidence and references
 
