@@ -1,0 +1,1069 @@
+# PROJECT: Conway's Game of Life — Interactive Web Sandbox
+
+## 1. Your Role and Main Objective
+
+You are an experienced software engineer, frontend developer, and UI/UX designer working as an autonomous AI coding agent inside Visual Studio Code.
+
+Your task is to design, implement, test, document, and publish a complete interactive web application based on Conway's Game of Life.
+
+This project is being developed as part of a university assignment focused on AI-assisted software development.
+
+You are responsible for the entire development process, including:
+
+- Planning the application architecture.
+- Creating the project structure.
+- Implementing the simulation algorithm.
+- Building an interactive cellular grid.
+- Implementing simulation controls.
+- Creating a modern, attractive, and intuitive user interface.
+- Adding predefined cellular patterns.
+- Testing and debugging the application.
+- Maintaining incremental Git commits.
+- Installing and configuring GitHub CLI if necessary.
+- Publishing the project to my GitHub account.
+- Deploying the application using GitHub Pages.
+- Documenting the entire development process.
+
+### Final Objective
+
+Deliver a fully functional, visually appealing, responsive, and well-documented Conway's Game of Life web application.
+
+Users should be able to create cellular configurations, run simulations, pause execution, advance individual generations, reset the environment, control simulation speed, and experiment with predefined patterns.
+
+The final application should feel like a polished educational simulation tool rather than a basic programming exercise.
+
+**Important:** Do not merely provide code snippets or implementation instructions. Actually create and modify the files inside the currently opened VS Code workspace.
+
+Proceed autonomously whenever possible. Ask for user interaction only when authentication, permissions, or essential external decisions require it.
+
+---
+
+# 2. Technologies and Project Architecture
+
+Use the following technologies:
+
+- HTML5 — application structure.
+- CSS3 — styling, layout, transitions, and responsive design.
+- Vanilla JavaScript (ES6+) — application logic.
+- HTML Canvas — rendering the simulation grid.
+- Git — version control.
+- GitHub — source code hosting.
+- GitHub Pages — public deployment.
+
+Do not use React, Angular, Vue, or other frontend frameworks.
+
+Do not implement unnecessary backend services.
+
+Do not use a database.
+
+Avoid external dependencies unless absolutely necessary.
+
+The application must run locally in a modern browser.
+
+### Suggested Project Structure
+
+```text
+conways-game-of-life/
+│
+├── index.html
+│
+├── css/
+│   └── styles.css
+│
+├── js/
+│   ├── app.js
+│   ├── simulation.js
+│   ├── renderer.js
+│   └── patterns.js
+│
+├── tests/
+│   └── simulation.test.js
+│
+├── docs/
+│   └── development-log.md
+│
+├── README.md
+├── .gitignore
+└── LICENSE
+```
+
+You may adjust the structure if a better architecture is appropriate.
+
+Keep the simulation engine independent from the user interface whenever possible.
+
+Use clear naming conventions and modular code.
+
+The source code must be understandable to a university student familiar with JavaScript.
+
+---
+
+# 3. Conway's Game of Life Algorithm
+
+Implement Conway's original Game of Life cellular automaton.
+
+The simulation operates on a two-dimensional grid.
+
+Each cell has two possible states:
+
+- Alive
+- Dead
+
+Each cell interacts with its eight neighboring cells.
+
+Implement the four original rules:
+
+1. A living cell with fewer than two living neighbors dies due to underpopulation.
+2. A living cell with two or three living neighbors survives.
+3. A living cell with more than three living neighbors dies due to overpopulation.
+4. A dead cell with exactly three living neighbors becomes alive through reproduction.
+
+### Critical Requirements
+
+All cells must update simultaneously.
+
+Calculate each generation using a separate data structure.
+
+Do not modify the current generation while computing the next generation.
+
+Use finite grid boundaries.
+
+Cells outside the grid are considered dead.
+
+Do not implement wrapping or toroidal boundaries.
+
+The algorithm must produce mathematically correct results.
+
+---
+
+# 4. Interactive Simulation Grid
+
+Create a large interactive cellular grid.
+
+Default grid size:
+
+**50 × 50 cells**
+
+Use HTML Canvas for rendering.
+
+### User Interactions
+
+The user must be able to:
+
+- Click an empty cell to make it alive.
+- Click a living cell to make it dead.
+- Click and drag to draw living cells.
+- Click and drag to erase living cells.
+- Interact with the grid using a touchscreen.
+- Modify the configuration while the simulation is paused.
+
+The drawing or erasing mode should be determined by the initial cell and remain consistent during the entire drag action.
+
+Prevent accidental text selection while interacting with the grid.
+
+### Visual Requirements
+
+- Clearly distinguish living and dead cells.
+- Display subtle grid lines.
+- Use smooth rendering.
+- Maintain correct cell proportions.
+- Keep the grid centered and visually balanced.
+- Adapt the Canvas size to the available screen space.
+- Support high-density displays.
+
+Ensure accurate mapping between pointer coordinates and individual cells.
+
+---
+
+# 5. Essential Simulation Controls
+
+**Every control in this section is mandatory.**
+
+Create an intuitive control panel with clearly labeled buttons.
+
+## 5.1 Play
+
+Implement a Play button.
+
+When pressed:
+
+- Start the simulation.
+- Automatically calculate subsequent generations.
+- Animate the grid at the selected speed.
+- Update the generation and population counters.
+- Display the status as Running.
+
+Prevent multiple concurrent simulation loops.
+
+## 5.2 Pause
+
+Implement a Pause button.
+
+When pressed:
+
+- Stop automatic generation updates.
+- Preserve the current grid configuration.
+- Preserve the generation counter.
+- Allow the user to edit cells.
+- Display the status as Paused.
+
+Users must be able to resume the simulation using Play.
+
+## 5.3 Reset / Clear
+
+Implement a Reset button.
+
+When pressed:
+
+- Stop the simulation.
+- Remove all living cells.
+- Reset the generation counter to zero.
+- Reset the population counter to zero.
+- Restore the initial empty grid.
+- Update the interface immediately.
+
+## 5.4 Step Forward
+
+Implement a Step button.
+
+When pressed:
+
+- Calculate exactly one new generation.
+- Update the grid.
+- Increase the generation counter by one.
+- Update the population counter.
+- Keep the simulation paused.
+
+Disable the Step button while automatic simulation is running.
+
+## 5.5 Randomize
+
+Implement a Randomize button.
+
+When pressed:
+
+- Stop the simulation.
+- Generate a random configuration of living cells.
+- Use a reasonable initial population density.
+- Reset the generation counter to zero.
+- Update the population counter.
+- Display the new configuration immediately.
+
+## 5.6 Speed Control
+
+Implement a speed slider.
+
+Speed range:
+
+**1–20 generations per second.**
+
+Requirements:
+
+- Display the current speed numerically.
+- Allow the user to adjust the speed at any time.
+- Apply changes immediately.
+- Avoid starting duplicate timers.
+- Keep simulation behavior consistent.
+
+## 5.7 Simulation Statistics
+
+Display:
+
+- Generation number.
+- Number of living cells.
+- Current simulation speed.
+- Simulation status: Running or Paused.
+
+Statistics must update whenever relevant application state changes.
+
+Manual cell editing should update the population without increasing the generation counter.
+
+---
+
+# 6. Predefined Cellular Patterns
+
+Implement a collection of well-known Conway's Game of Life patterns.
+
+Mandatory patterns:
+
+1. Glider
+2. Blinker
+3. Toad
+4. Pulsar
+5. Lightweight Spaceship (LWSS)
+
+Create a clearly organized pattern selection panel.
+
+### Pattern Placement
+
+Users must be able to:
+
+- Select a predefined pattern.
+- Preview the selected pattern.
+- Place the pattern on the grid.
+- Return to normal drawing mode.
+
+The pattern must preserve its correct structure and orientation.
+
+Existing live cells outside the placement area must remain unchanged.
+
+If a pattern cannot fit inside the grid, prevent placement and display appropriate feedback.
+
+A selected pattern should not automatically overwrite the entire grid.
+
+### Pattern Information
+
+Optionally display short descriptions explaining the behavior of individual patterns.
+
+Examples:
+
+- Glider — a moving pattern.
+- Blinker — a period-two oscillator.
+- Pulsar — a period-three oscillator.
+
+---
+
+# 7. User Interface and Visual Design
+
+**This section is a major priority.**
+
+Create a modern, clean, visually attractive, and intuitive user interface.
+
+The application should look like a professionally designed interactive educational tool.
+
+Avoid plain, outdated, or visually cluttered layouts.
+
+## 7.1 Visual Style
+
+Use a modern dark theme.
+
+Suggested design:
+
+- Dark charcoal or deep navy background.
+- Bright contrasting living cells.
+- Subtle grid lines.
+- Rounded panels and buttons.
+- Clean typography.
+- Balanced spacing.
+- Consistent accent colors.
+- Smooth hover effects.
+- Subtle animations and transitions.
+
+Avoid unnecessary decorative elements that distract from the simulation.
+
+The design should remain elegant and functional.
+
+## 7.2 Main Layout
+
+Organize the interface into clear sections.
+
+### Header
+
+Display the title:
+
+**Conway's Game of Life**
+
+Subtitle:
+
+**Interactive Cellular Automaton Simulator**
+
+### Main Simulation Area
+
+Display the interactive grid prominently.
+
+The simulation grid should be the main visual focus.
+
+### Control Panel
+
+Include:
+
+- Play
+- Pause
+- Step
+- Reset
+- Randomize
+- Speed slider
+
+### Statistics Panel
+
+Display:
+
+- Generation
+- Population
+- Speed
+- Status
+
+### Patterns Panel
+
+Provide access to predefined patterns.
+
+### Information Section
+
+Include a concise explanation of the Game of Life and its four rules.
+
+## 7.3 Usability Requirements
+
+The interface must be understandable even for first-time users.
+
+Requirements:
+
+- Clearly labeled controls.
+- Recognizable icons where appropriate.
+- Immediate visual feedback.
+- Consistent button behavior.
+- Clearly distinguishable disabled controls.
+- Accessible text contrast.
+- Readable fonts.
+- Helpful tooltips where appropriate.
+- Minimal unnecessary interaction steps.
+
+The most important controls must remain easy to find.
+
+A new user should be able to start experimenting without reading extensive instructions.
+
+## 7.4 Responsive Design
+
+The application must support:
+
+- Desktop computers.
+- Laptops.
+- Tablets.
+- Smartphones.
+
+On small screens:
+
+- Rearrange panels appropriately.
+- Prevent horizontal overflow.
+- Keep controls large enough for touch interaction.
+- Maintain readable text.
+- Preserve the usability of the simulation grid.
+
+Ensure the application works correctly on common modern browsers.
+
+---
+
+# 8. Optional Additional Features
+
+Implement these features only after all mandatory functionality is complete and stable.
+
+## 8.1 Save and Load
+
+Allow users to save the current configuration using localStorage.
+
+Provide a way to restore previously saved configurations.
+
+## 8.2 Adjustable Grid Size
+
+Allow users to choose:
+
+- 30 × 30
+- 50 × 50
+- 70 × 70
+
+Changing the size should stop the simulation and reset the grid.
+
+## 8.3 Keyboard Shortcuts
+
+Implement:
+
+- Space — Play / Pause
+- R — Reset
+- N — Next Generation
+- G — Randomize
+
+Keyboard shortcuts must not interfere with form inputs.
+
+## 8.4 Pattern Placement Preview
+
+Display a translucent preview of the selected pattern before placement.
+
+Optional features must never compromise the stability of the essential application.
+
+---
+
+# 9. Performance and Code Quality
+
+Keep the application lightweight and responsive.
+
+Requirements:
+
+- Use efficient Canvas rendering.
+- Avoid unnecessary DOM updates.
+- Keep the simulation algorithm separate from rendering.
+- Prevent duplicate simulation timers.
+- Handle rapid user interactions safely.
+- Avoid unnecessary calculations while paused.
+- Maintain consistent simulation speed.
+- Avoid memory leaks.
+
+Use meaningful function and variable names.
+
+Add useful comments where the logic is not immediately obvious.
+
+Do not add excessive comments.
+
+The application must run without JavaScript console errors.
+
+---
+
+# 10. Testing and Validation
+
+Thoroughly test the application before considering it complete.
+
+## 10.1 Algorithm Tests
+
+Verify the following behaviors:
+
+### Block
+
+A 2×2 block must remain unchanged after subsequent generations.
+
+### Blinker
+
+A blinker must alternate between horizontal and vertical configurations.
+
+### Glider
+
+A glider must move diagonally while preserving its expected behavior.
+
+### Empty Grid
+
+An empty grid must remain empty.
+
+### Boundary Conditions
+
+Cells outside the grid must be treated as dead.
+
+### Simultaneous Updates
+
+Verify that the algorithm does not modify the current generation while calculating the next one.
+
+## 10.2 Interface Tests
+
+Verify that:
+
+- Play starts the simulation.
+- Pause stops the simulation.
+- Play resumes a paused simulation.
+- Reset clears the entire grid.
+- Step advances exactly one generation.
+- Randomize generates a new configuration.
+- The speed slider changes simulation speed.
+- Drawing and erasing work correctly.
+- Touch interaction works.
+- Pattern placement works.
+- Population statistics remain accurate.
+- Generation counters update correctly.
+- Multiple simulation timers cannot run simultaneously.
+
+## 10.3 Responsive Testing
+
+Test the layout at different viewport sizes.
+
+Check that buttons remain accessible and the Canvas does not overflow the available screen space.
+
+If browser automation or browser inspection tools are available, use them to verify the actual rendered interface.
+
+Fix any discovered problems.
+
+Do not claim tests were executed unless they were actually run.
+
+---
+
+# 11. Git and GitHub Setup
+
+**Git integration and GitHub publication are mandatory.**
+
+The application must be stored in a Git repository and published to my existing GitHub account.
+
+## 11.1 Verify Git Installation
+
+Check whether Git is installed.
+
+If Git is missing, install it using a suitable method for Windows.
+
+Verify that Git works correctly.
+
+## 11.2 Install GitHub CLI
+
+GitHub CLI (`gh`) is currently not installed on my computer.
+
+You must attempt to install it automatically.
+
+Since I am using Windows, prefer Windows Package Manager.
+
+Use:
+
+```powershell
+winget install --id GitHub.cli -e
+```
+
+If Windows Package Manager is unavailable, use an appropriate official installation method.
+
+Do not download software from untrusted sources.
+
+After installation, verify:
+
+```powershell
+gh --version
+```
+
+If the command is not immediately recognized, restart or refresh the terminal environment and check the executable location.
+
+## 11.3 GitHub Authentication
+
+Check whether GitHub CLI is authenticated:
+
+```powershell
+gh auth status
+```
+
+If authentication is required, initiate:
+
+```powershell
+gh auth login
+```
+
+Use browser-based authentication.
+
+Allow me to complete any required authorization in my browser.
+
+Do not ask me to paste passwords or authentication tokens into the chat.
+
+Do not create a new GitHub account.
+
+Use my existing authenticated account.
+
+## 11.4 Initialize the Local Repository
+
+Check whether the current workspace already contains a Git repository.
+
+If not, initialize one.
+
+Use `main` as the primary branch.
+
+Create an appropriate `.gitignore`.
+
+Do not overwrite existing repositories or delete unrelated files.
+
+---
+
+# 12. Incremental Git Commits
+
+**IMPORTANT: Do not create only one final commit.**
+
+I want the Git history to reflect the actual development process.
+
+Create separate commits after completing and verifying meaningful development stages.
+
+Each commit should contain a logically complete change.
+
+Use descriptive conventional commit messages.
+
+## Suggested Commit Structure
+
+### Commit 1 — Project Initialization
+
+```text
+chore: initialize project structure
+```
+
+Create the project directories and initial files.
+
+### Commit 2 — Core Simulation Engine
+
+```text
+feat: implement Conway's Game of Life algorithm
+```
+
+Implement the cellular automaton logic.
+
+### Commit 3 — Interactive Grid
+
+```text
+feat: implement interactive canvas grid
+```
+
+Add rendering and mouse/touch interaction.
+
+### Commit 4 — Simulation Controls
+
+```text
+feat: add play pause reset and step controls
+```
+
+Implement the mandatory control buttons.
+
+### Commit 5 — Speed and Statistics
+
+```text
+feat: implement speed control and simulation statistics
+```
+
+Add the speed slider and real-time statistics.
+
+### Commit 6 — User Interface
+
+```text
+style: implement modern responsive interface
+```
+
+Implement the polished dark-themed interface and responsive layout.
+
+### Commit 7 — Preset Patterns
+
+```text
+feat: add predefined cellular patterns
+```
+
+Add Glider, Blinker, Toad, Pulsar, and LWSS.
+
+### Commit 8 — Tests and Bug Fixes
+
+```text
+test: validate simulation behavior
+```
+
+Implement automated tests and verify core functionality.
+
+### Commit 9 — Documentation
+
+```text
+docs: add README and development documentation
+```
+
+Complete project documentation.
+
+These are suggested milestones.
+
+The exact number of commits may vary.
+
+**The important requirement is that commits must be created incrementally during actual development, not artificially generated at the end.**
+
+## Additional Commit Rules
+
+1. Commit after each meaningful completed feature.
+2. Create separate commits for significant bug fixes.
+3. Keep unrelated changes in separate commits.
+4. Review changes before committing.
+5. Do not create empty commits.
+6. Do not fabricate development history.
+7. Do not commit passwords, access tokens, or secrets.
+8. Do not squash or rewrite the development history.
+9. Use descriptive commit messages.
+10. Push commits to GitHub after configuring the remote repository.
+
+### Patches
+
+Whenever a significant bug or implementation issue is discovered:
+
+- Identify the problem.
+- Apply the correction.
+- Verify the fix.
+- Create a separate commit.
+
+Example:
+
+```text
+fix: correct cell coordinates after canvas resize
+```
+
+Another example:
+
+```text
+fix: prevent duplicate simulation timers
+```
+
+Do not combine unrelated patches into a single commit.
+
+Minor corrections made while implementing an unfinished feature can be included in the corresponding feature commit.
+
+---
+
+# 13. GitHub Repository Creation
+
+After successful authentication, create a new public GitHub repository.
+
+Repository name:
+
+**conways-game-of-life**
+
+Repository description:
+
+"An interactive Conway's Game of Life web sandbox developed with AI-assisted software engineering."
+
+Use my existing GitHub account.
+
+If a repository with the same name already exists, do not overwrite or delete it.
+
+Choose a suitable alternative name if necessary.
+
+Connect the local repository to the new GitHub repository.
+
+Push the `main` branch, including all incremental commits.
+
+Verify that the source files and commit history are accessible online.
+
+Do not claim the push succeeded unless it has been verified.
+
+---
+
+# 14. GitHub Pages Deployment
+
+Deploy the application using GitHub Pages.
+
+Since the application uses HTML, CSS, and JavaScript without a backend, GitHub Pages should be appropriate.
+
+Requirements:
+
+1. Configure GitHub Pages for the repository.
+2. Publish the static website from the appropriate branch and directory.
+3. Verify that the public website loads.
+4. Test the main simulation controls on the deployed website if browser tools are available.
+5. Provide the final public URL.
+
+If deployment requires additional permissions or manual configuration, explain the exact required steps.
+
+Do not report successful deployment without verification.
+
+---
+
+# 15. Documentation
+
+Create a detailed README.md file.
+
+Include:
+
+1. Project name.
+2. Project description.
+3. Main objectives.
+4. Features.
+5. Technologies used.
+6. Local setup instructions.
+7. Simulation controls.
+8. Conway's Game of Life rules.
+9. Project structure.
+10. Testing instructions.
+11. GitHub Pages link, if available.
+12. Information about AI-assisted development.
+
+## AI Development Log
+
+Create:
+
+`docs/development-log.md`
+
+This document is particularly important for the university assignment.
+
+Record the actual development process.
+
+Include:
+
+- Original project requirements.
+- Major development stages.
+- Important prompts and instructions.
+- Features implemented at each stage.
+- Design decisions.
+- Problems encountered.
+- Solutions implemented.
+- Testing results.
+- Significant improvements.
+- Relevant Git commit hashes.
+
+Do not invent prompts, bugs, tests, or development events.
+
+Include the original user prompt or preserve an exact reference to it.
+
+Ensure that the documentation matches the actual Git history.
+
+The professor should be able to understand how an AI agent contributed to the development process.
+
+---
+
+# 16. Development Workflow
+
+Follow this development sequence.
+
+### Phase 1 — Planning and Git Initialization
+
+Analyze the requirements.
+
+Determine the architecture.
+
+Create the project structure.
+
+Initialize the local Git repository.
+
+### Phase 2 — Core Algorithm
+
+Implement Conway's Game of Life rules.
+
+Verify fundamental algorithm behavior.
+
+Create a commit.
+
+### Phase 3 — Interactive Grid
+
+Implement Canvas rendering.
+
+Add drawing and erasing functionality.
+
+Create a commit.
+
+### Phase 4 — Simulation Controls
+
+Implement Play, Pause, Step, Reset, and Randomize.
+
+Create a commit.
+
+### Phase 5 — Speed and Statistics
+
+Implement speed control and simulation statistics.
+
+Create a commit.
+
+### Phase 6 — UI/UX Design
+
+Build the modern responsive interface.
+
+Verify usability.
+
+Create a commit.
+
+### Phase 7 — Preset Patterns
+
+Implement predefined patterns and placement controls.
+
+Create a commit.
+
+### Phase 8 — Testing and Refinement
+
+Run algorithm tests.
+
+Test the user interface.
+
+Fix discovered problems.
+
+Create appropriate commits for tests and significant patches.
+
+### Phase 9 — Documentation
+
+Create README.md.
+
+Create the AI development log.
+
+Record relevant commit hashes.
+
+Commit the documentation.
+
+### Phase 10 — GitHub Publication
+
+Install and configure GitHub CLI if necessary.
+
+Authenticate using my existing GitHub account.
+
+Create the public repository.
+
+Push the complete Git history.
+
+### Phase 11 — GitHub Pages
+
+Configure deployment.
+
+Publish the application.
+
+Verify the public website.
+
+### Phase 12 — Final Verification
+
+Verify the application, Git history, repository contents, and deployment.
+
+Provide the final report.
+
+---
+
+# 17. Acceptance Criteria
+
+The project is complete only when:
+
+1. The application runs in a modern browser.
+2. Conway's rules are correctly implemented.
+3. Users can interactively modify the grid.
+4. Play works correctly.
+5. Pause works correctly.
+6. Reset clears the grid.
+7. Step advances exactly one generation.
+8. Randomize creates a new configuration.
+9. Simulation speed is adjustable.
+10. Generation and population counters are accurate.
+11. Preset patterns work correctly.
+12. The interface is attractive and intuitive.
+13. The layout is responsive.
+14. The code is modular and maintainable.
+15. Automated tests have been implemented and executed.
+16. Documentation is complete.
+17. Git is configured.
+18. Multiple meaningful development commits exist.
+19. Significant patches have separate commits where appropriate.
+20. The project is pushed to my GitHub account.
+21. The repository is publicly accessible.
+22. GitHub Pages deployment has been attempted.
+23. The development log accurately reflects the actual development history.
+
+If any requirement cannot be completed, clearly report the limitation.
+
+---
+
+# 18. Final Instructions
+
+You are acting as an autonomous AI coding agent.
+
+Do not stop after planning.
+
+Do not simply explain what files should be created.
+
+**Actually implement the entire application.**
+
+Work directly in the current VS Code workspace.
+
+Make reasonable technical decisions independently.
+
+Prioritize:
+
+1. Algorithm correctness.
+2. Functional simulation controls.
+3. Intuitive user experience.
+4. Modern visual design.
+5. Responsive layout.
+6. Clean code architecture.
+7. Reliable testing.
+8. Meaningful incremental Git history.
+9. Clear documentation.
+10. Successful GitHub publication.
+
+Do not add unnecessary complexity.
+
+Do not overwrite unrelated files.
+
+Do not fabricate tests or development events.
+
+Create real commits throughout the development process.
+
+Use my existing GitHub account for publication.
+
+If a required operation is blocked by authentication or permissions, clearly explain what user action is needed.
+
+## Final Report
+
+After completing the project, provide:
+
+- Summary of implemented features.
+- Project structure.
+- Testing results.
+- Total number of Git commits.
+- Short summary of the development history.
+- Latest commit hash.
+- GitHub repository URL.
+- GitHub Pages URL, if available.
+- Remaining limitations, if any.
+
+**The final product must be a complete, polished, interactive Conway's Game of Life web application, suitable for demonstration as a university AI-assisted software development project.**
