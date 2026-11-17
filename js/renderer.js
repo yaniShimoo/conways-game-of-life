@@ -127,7 +127,7 @@ export class Renderer {
     if (this.editable && this.hover) {
       const { x, y } = this.hover;
       const fits = !this.pattern || this.simulation.fits(this.pattern, x, y);
-      ctx.fillStyle = fits ? '#b4f260' : '#ff897b70';
+      ctx.fillStyle = fits ? '#b4f27260' : '#ff897b70';
       const cells = this.pattern?.cells || [[0, 0]];
       for (const [dx, dy] of cells) if (this.simulation.contains(x + dx, y + dy)) {
         ctx.fillRect((x + dx) * cellSize + gap, (y + dy) * cellSize + gap, cellSize - 2 * gap, cellSize - 2 * gap);
