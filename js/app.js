@@ -1,1 +1,5 @@
-// The application controller connects the independent engine and Canvas renderer.
+import { Simulation } from './simulation.js';
+import { Renderer } from './renderer.js';
+
+const simulation = new Simulation();
+const renderer = new Renderer(document.querySelector('#grid'), simulation, () => renderer.draw());
